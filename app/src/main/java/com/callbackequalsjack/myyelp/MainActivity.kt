@@ -3,6 +3,7 @@ package com.callbackequalsjack.myyelp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.callbackequalsjack.myyelp.adapter.RestaurantAdapter
@@ -24,10 +25,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupRecyclerView()
+        retrieveData(defaultLocation, defaultTerm)
+        setupSearchbar()
 
+    }
+
+    private fun setupRecyclerView() = binding.recyclerView.apply {
+        restaurantAdapter = RestaurantAdapter()
+        adapter = restaurantAdapter
+        layoutManager = LinearLayoutManager(this@MainActivity)
+    }
+
+    private fun retrieveData(location: String, term: String) {
         lifecycleScope.launchWhenCreated {
             val response = try {
-                RetrofitInstance.api.getAll(defaultLocation, defaultTerm)
+                RetrofitInstance.api.getAll(location, term)
             } catch (e: IOException) {
                 Log.e(TAG, "IOException, you might not have internet connection")
                 return@launchWhenCreated
@@ -43,9 +55,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRecyclerView() = binding.recyclerView.apply {
-        restaurantAdapter = RestaurantAdapter()
-        adapter = restaurantAdapter
-        layoutManager = LinearLayoutManager(this@MainActivity)
+    private fun setupSearchbar() {
+        binding.searchBar.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    retrieveData(defaultLocation, query)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
     }
 }
+
+
