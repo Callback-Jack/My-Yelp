@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/item_position"
+                style="@style/text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textStyle="bold"
+                tools:text="1" />
+
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/item_title"
+                    style="@style/text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    tools:text="Title" />
+
+                <TextView
+                    android:id="@+id/item_rating"
+                    style="@style/text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    tools:text="4.5" />
+
+                <TextView
+                    android:id="@+id/item_category"
+                    style="@style/text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="Sushi" />
+
+                <TextView
+                    android:id="@+id/item_phone"
+                    style="@style/text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="514 555 3333" />
+
+                <TextView
+                    android:id="@+id/item_address"
+                    style="@style/text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    tools:text="502 Ross Dr, Sherbrook, Montreal" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/item_image"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:importantForAccessibility="no"
+                android:scaleType="centerInside"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>
