@@ -40,13 +40,14 @@
                     android:textStyle="bold"
                     tools:text="Title" />
 
-                <TextView
+                <RatingBar
                     android:id="@+id/item_rating"
-                    style="@style/text_style"
-                    android:layout_width="match_parent"
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    tools:text="4.5" />
+
+                    android:foregroundTint="#FFEB3B"
+                    tools:ignore="SpeakableTextPresentCheck" />
 
                 <TextView
                     android:id="@+id/item_category"

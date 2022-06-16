@@ -43,7 +43,7 @@ class RestaurantAdapter : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewH
         holder.binding.apply {
             itemPosition.text = "${position + 1}"
             itemTitle.text = restaurant.name
-            itemRating.text = "Rating: %.1f".format(restaurant.rating)
+            itemRating.rating = restaurant.rating.toFloat()
             itemCategory.text = restaurant.categories[0].title
             itemPhone.text = restaurant.display_phone
             itemAddress.text = "${restaurant.location.address1}, " +

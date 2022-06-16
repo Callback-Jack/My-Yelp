@@ -6,24 +6,55 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <SearchView
-        android:id="@+id/search_bar"
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:autofillHints="Search here (e.g. sushi)"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/purple_700"
+        app:cardCornerRadius="10dp"
+        app:contentPadding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/search_bar_card">
 
-    </SearchView>
+        <SearchView
+            android:id="@+id/search_bar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:queryHint="Search here (e.g. sushi)" />
+    </androidx.cardview.widget.CardView>
 
-    <Spinner
-        android:id="@+id/spinner"
+
+
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
+        android:id="@+id/spinner_card"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/search_bar_card" >
+        <LinearLayout
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/text_style"
+                android:text="Sort By" />
+            <Spinner
+                style="@style/text_style"
+                android:id="@+id/spinner"
+                android:layout_width="0dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_height="60dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
@@ -31,5 +62,5 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_card" />
 </androidx.constraintlayout.widget.ConstraintLayout>

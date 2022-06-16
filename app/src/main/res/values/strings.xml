@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">My Yelp</string>
-    <string name="API_KEY">Bearer 2YEj6Vcy-AcHANVK5REgDJb9vTnXyTZgtEEbBvxn5X3orHGHTFBL9P4phSj8r-y7pMWQH_e2_YuByOV6PznxIT2xd7N7poVyoNO7gQphq7VNYOhQnUnCHOIulMijYnYx</string>
+    <string-array name="spinner_options">
+        <item>Rating</item>
+        <item>Price</item>
+    </string-array>
 </resources>

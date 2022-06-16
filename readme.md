@@ -23,3 +23,14 @@ These are the key steps for this project:
   - setup the `RecyclerView` adapter
   - use `lifecycleScope` to retrieve data from the API 
   - catch the `IOException` and `HttpException`
+  
+- Create the Search bar for user to search restaurants:
+  - Create the view using `SearchView`
+  - Set the `setOnQueryTextListener` in the `SearchView`
+  - Override the functions: `onQueryTextSubmit(query: String?)` and `onQueryTextChange(newText: String?)` 
+  
+- Create some sorting methods for the restaurant list:
+  - Extend the `MainActivity` with `AdapterView.OnItemSelectedListener`
+  - Setup the `spinner.adapter` with `R.array.spinner_options` which has the options to display
+  - Override the `onItemSelected()` with the callback functions implemented with the sorting methods
+  
