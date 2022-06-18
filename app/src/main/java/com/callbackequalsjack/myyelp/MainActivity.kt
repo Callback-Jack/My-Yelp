@@ -4,10 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.SearchView
-import android.widget.Spinner
+import android.widget.*
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.callbackequalsjack.myyelp.adapter.RestaurantAdapter
@@ -35,7 +32,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         spinner = binding.spinner
         searchBar = binding.searchBar
-        restaurantAdapter = RestaurantAdapter()
+        restaurantAdapter = RestaurantAdapter() {
+                position -> onItemClick(position)
+        }
+
 
         setupRecyclerView()
         retrieveData(defaultLocation, defaultTerm)
@@ -46,6 +46,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun setupRecyclerView() = binding.recyclerView.apply {
         adapter = restaurantAdapter
         layoutManager = LinearLayoutManager(this@MainActivity)
+    }
+
+    private fun onItemClick(position: Int) {
+        val restaurantName = restaurantAdapter.restaurantList[position].name
+        Toast.makeText(this, restaurantName, Toast.LENGTH_SHORT).show()
     }
 
     private fun retrieveData(location: String, term: String) {
@@ -108,13 +113,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun sortByRating() {
-        val newData = restaurantList.sortedByDescending { item -> item.rating ?: 0.0 }
-        restaurantAdapter.restaurantList = newData
+        val sorted = restaurantList.sortedByDescending { item -> item.rating ?: 0.0 }
+        restaurantAdapter.restaurantList = sorted
     }
 
     private fun sortByPrice() {
-        val newData = restaurantList.sortedByDescending { item -> item.price?.length ?: 0 }
-        restaurantAdapter.restaurantList = newData
+        val sorted = restaurantList.sortedByDescending { item -> item.price?.length ?: 0 }
+        restaurantAdapter.restaurantList = sorted
     }
 }
 

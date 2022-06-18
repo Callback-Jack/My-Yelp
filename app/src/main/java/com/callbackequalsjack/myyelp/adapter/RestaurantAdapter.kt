@@ -1,6 +1,7 @@
 package com.callbackequalsjack.myyelp.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -9,10 +10,17 @@ import com.bumptech.glide.Glide
 import com.callbackequalsjack.myyelp.data.Businesse
 import com.callbackequalsjack.myyelp.databinding.ItemRestaurantBinding
 
-class RestaurantAdapter : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder> () {
+class RestaurantAdapter(private val onItemClick: (position: Int) -> Unit) : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewHolder> () {
 
-    inner class RestaurantViewHolder (val binding: ItemRestaurantBinding) : RecyclerView
-    .ViewHolder(binding.root)
+    inner class RestaurantViewHolder (val binding: ItemRestaurantBinding, val onItemClick: (position: Int) -> Unit) : RecyclerView
+    .ViewHolder(binding.root), View.OnClickListener {
+        init {
+            binding.root.setOnClickListener(this)
+        }
+        override fun onClick(v: View?) {
+            onItemClick(adapterPosition)
+        }
+    }
 
     private val diffCallback = object : DiffUtil.ItemCallback<Businesse> () {
         override fun areItemsTheSame(oldItem: Businesse, newItem: Businesse): Boolean {
@@ -34,7 +42,8 @@ class RestaurantAdapter : RecyclerView.Adapter<RestaurantAdapter.RestaurantViewH
         return RestaurantViewHolder(
             ItemRestaurantBinding.inflate(LayoutInflater.from(parent.context),
             parent,
-            false)
+            false),
+            onItemClick
         )
     }
 
