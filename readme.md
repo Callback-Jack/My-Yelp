@@ -33,4 +33,14 @@ These are the key steps for this project:
   - Extend the `MainActivity` with `AdapterView.OnItemSelectedListener`
   - Setup the `spinner.adapter` with `R.array.spinner_options` which has the options to display
   - Override the `onItemSelected()` with the callback functions implemented with the sorting methods
+
+- Create database for storage of the user's favorite restaurants using `Room`
+  - Add `Room` dependencies to `build.gradle`
+  - Define `data class` `Favorite`
+  - Define `FavoriteDao` `interface`
+  - Create `FavoriteDatabase` `singleton class` 
+  - Initialize `dao` `singleton` in `MainActivity` `onCreate()` 
+  - Add `onItemClick` lambda function parameter to the `RestaurantAdapter`
+  - Create `AlertDialog` for user to confirm the selection of item to add to favorite when clicked.
+  - Use `lifecycleScope` to insert favorite into the database
   

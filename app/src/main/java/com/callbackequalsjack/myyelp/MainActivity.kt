@@ -1,16 +1,22 @@
 package com.callbackequalsjack.myyelp
 
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.callbackequalsjack.myyelp.adapter.RestaurantAdapter
 import com.callbackequalsjack.myyelp.api.RetrofitInstance
 import com.callbackequalsjack.myyelp.data.Businesse
+import com.callbackequalsjack.myyelp.database.Favorite
+import com.callbackequalsjack.myyelp.database.FavoriteDao
+import com.callbackequalsjack.myyelp.database.FavoriteDatabase
 import com.callbackequalsjack.myyelp.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -23,6 +29,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var spinner: Spinner
     private lateinit var searchBar: SearchView
     private lateinit var restaurantList: List<Businesse>
+    private lateinit var favoriteDao: FavoriteDao
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +48,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         retrieveData(defaultLocation, defaultTerm)
         setupSearchbar()
 
+        favoriteDao = FavoriteDatabase.getInstance(this).favoriteDao
     }
 
     private fun setupRecyclerView() = binding.recyclerView.apply {
@@ -49,8 +57,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun onItemClick(position: Int) {
-        val restaurantName = restaurantAdapter.restaurantList[position].name
-        Toast.makeText(this, restaurantName, Toast.LENGTH_SHORT).show()
+        val item: Businesse = restaurantAdapter.restaurantList[position]
+        val favorite = Favorite(
+            item.name,
+            item.rating.toFloat(),
+            item.categories[0].title,
+            item.display_phone,
+            "${item.location.address1}, " +
+                    "${item.location.city}, " +
+                    "${item.location.state}",
+            item.image_url
+        )
+        createAlertDialog(favorite)
     }
 
     private fun retrieveData(location: String, term: String) {
@@ -109,8 +127,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-    }
+    override fun onNothingSelected(parent: AdapterView<*>?) { }
 
     private fun sortByRating() {
         val sorted = restaurantList.sortedByDescending { item -> item.rating ?: 0.0 }
@@ -120,6 +137,29 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun sortByPrice() {
         val sorted = restaurantList.sortedByDescending { item -> item.price?.length ?: 0 }
         restaurantAdapter.restaurantList = sorted
+    }
+
+    private fun createAlertDialog(favorite: Favorite) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Add to Favorite?")
+        builder.setMessage("Do you want to add this item to favorite?")
+        builder.setPositiveButton("Yes"){ dialog, which -> addItemToFavorite(favorite)}
+        builder.setNegativeButton("No"){ dialog, which -> Toast.makeText(this, "${favorite
+            .itemTitle} not added.", Toast
+            .LENGTH_SHORT).show()}
+        val alertDialog: AlertDialog = builder.create()
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+    }
+
+    private fun addItemToFavorite(favorite: Favorite) {
+
+        lifecycleScope.launch {
+            favoriteDao.insertFavorite(favorite)
+            Toast.makeText(this@MainActivity, "${favorite
+                .itemTitle} added to favorite",
+                Toast.LENGTH_SHORT).show()
+        }
     }
 }
 
