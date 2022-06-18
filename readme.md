@@ -43,4 +43,10 @@ These are the key steps for this project:
   - Add `onItemClick` lambda function parameter to the `RestaurantAdapter`
   - Create `AlertDialog` for user to confirm the selection of item to add to favorite when clicked.
   - Use `lifecycleScope` to insert favorite into the database
+  - Create `FavoriteActivity` with `RecyclerView` similar to the previous one to show the list 
+    of Favorites.
+  - Add `onItemClick()` to the `RecyclerView` to pop a `AlertDialog`, so user can remove item 
+    from the list of favorites.
+  
+- 
   

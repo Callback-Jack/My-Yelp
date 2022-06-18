@@ -1,6 +1,7 @@
 package com.callbackequalsjack.myyelp
 
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var binding: ActivityMainBinding
     private lateinit var restaurantAdapter: RestaurantAdapter
     private lateinit var spinner: Spinner
-    private lateinit var searchBar: SearchView
+    private lateinit var searchBar: androidx.appcompat.widget.SearchView
     private lateinit var restaurantList: List<Businesse>
     private lateinit var favoriteDao: FavoriteDao
 
@@ -49,6 +50,11 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setupSearchbar()
 
         favoriteDao = FavoriteDatabase.getInstance(this).favoriteDao
+
+        binding.deleteButton.setOnClickListener {
+            val intent = Intent(this, FavoriteActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun setupRecyclerView() = binding.recyclerView.apply {
@@ -93,7 +99,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setupSearchbar() {
-        searchBar.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+        searchBar.setOnQueryTextListener(object: SearchView.OnQueryTextListener,
+            androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (query != null) {
                     retrieveData(defaultLocation, query)

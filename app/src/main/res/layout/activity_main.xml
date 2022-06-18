@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/search_bar_card">
 
-        <SearchView
+        <androidx.appcompat.widget.SearchView
             android:id="@+id/search_bar"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -52,6 +52,11 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_height="60dp"
                 android:layout_weight="1" />
+            <Button
+                android:text="Favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/delete_button" />
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
