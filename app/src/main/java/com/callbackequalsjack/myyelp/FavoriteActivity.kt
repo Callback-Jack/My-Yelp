@@ -1,10 +1,13 @@
 package com.callbackequalsjack.myyelp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.callbackequalsjack.myyelp.adapter.FavoriteAdapter
@@ -23,6 +26,7 @@ class FavoriteActivity : AppCompatActivity() {
     private lateinit var favoriteAdapter: FavoriteAdapter
     private lateinit var favoriteDao: FavoriteDao
     private lateinit var favoriteList: List<Favorite>
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,15 +39,37 @@ class FavoriteActivity : AppCompatActivity() {
         favoriteDao = FavoriteDatabase.getInstance(this).favoriteDao
         setupRecyclerView()
         retrieveData()
+
+        //        setup for the menu toggle
+        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+//        set listener for navigation
+        binding.navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_item_search -> returnToMain()
+                R.id.menu_item_favorite -> binding.drawerLayout.closeDrawer(binding.navView)
+            }
+            true
+        }
+
+    }
+
+    private fun returnToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
     }
 
     private fun retrieveData(){
         lifecycleScope.launch {
             favoriteList = favoriteDao.getFavorites()
-            if (favoriteList != null) {
-                favoriteAdapter.favoriteList = favoriteList
+            if (favoriteList == null || favoriteList.isEmpty()) {
+                binding.emptyFavorite.isVisible = true
             } else {
-                Log.e("FavoriteActivity", "Database failure")
+                binding.emptyFavorite.isVisible = false
+                favoriteAdapter.favoriteList = favoriteList
             }
         }
     }
@@ -85,6 +111,7 @@ class FavoriteActivity : AppCompatActivity() {
                 .itemTitle} deleted from favorite",
                 Toast.LENGTH_SHORT).show()
             val newList = favoriteDao.getFavorites()
+            if (newList.isEmpty()) binding.emptyFavorite.isVisible = true
             favoriteAdapter.favoriteList = newList
         }
     }

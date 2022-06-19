@@ -5,8 +5,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +33,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var searchBar: androidx.appcompat.widget.SearchView
     private lateinit var restaurantList: List<Businesse>
     private lateinit var favoriteDao: FavoriteDao
+//    if we need the toggle button to open the nav menu
+    private lateinit var toggle: ActionBarDrawerToggle
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,10 +55,32 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         favoriteDao = FavoriteDatabase.getInstance(this).favoriteDao
 
-        binding.deleteButton.setOnClickListener {
-            val intent = Intent(this, FavoriteActivity::class.java)
-            startActivity(intent)
+//        setup for the menu toggle
+        toggle = ActionBarDrawerToggle(this, binding.drawerLayout, R.string.open, R.string.close)
+        binding.drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+//        set listener for navigation
+        binding.navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.menu_item_search -> binding.drawerLayout.closeDrawer(binding.navView)
+                R.id.menu_item_favorite -> returnToFavorite()
+            }
+            true
         }
+    }
+
+    private fun returnToFavorite() {
+        val intent = Intent(this, FavoriteActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (toggle.onOptionsItemSelected(item)) {
+            return true
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun setupRecyclerView() = binding.recyclerView.apply {
